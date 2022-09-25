@@ -16,11 +16,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfiguration
 {
+   //Hardware Component
    public static final String REQUEST_COMPONENT_QUE = "request_show_hardware_component_que";
-   public static final String RESPONSE_COMPONENT_QUE = "response_show_hardware_component_que";
+   public static final String REQUEST_HARDWARE_COMPONENT_EXCHANGE = "request_hardware_component_exchange";
 
-   public static final String REQUEST_PRODUCT_EXCHANGE = "request_hardware_component_exchange";
-   public static final String RESPONSE_PRODUCT_EXCHANGE = "response_hardware_component_exchange";
+   //Product
+   public static final String REQUEST_PRODUCT_QUE = "request_show_product_que";
+   public static final String REQUEST_PRODUCT_EXCHANGE = "request_product_exchange";
 
 
 
@@ -51,15 +53,15 @@ public class RabbitConfiguration
       }
 
       @Bean
-      @Qualifier(REQUEST_PRODUCT_EXCHANGE)
+      @Qualifier(REQUEST_HARDWARE_COMPONENT_EXCHANGE)
       public TopicExchange request_hardware_component_exchange()
       {
-         return new TopicExchange(REQUEST_PRODUCT_EXCHANGE);
+         return new TopicExchange(REQUEST_HARDWARE_COMPONENT_EXCHANGE);
       }
 
       @Bean
-      public Binding binding_show_component_with_product_exchange(@Qualifier(REQUEST_COMPONENT_QUE) Queue queue,
-            @Qualifier(REQUEST_PRODUCT_EXCHANGE) TopicExchange exchange)
+      public Binding binding_show_component_with_component_exchange(@Qualifier(REQUEST_COMPONENT_QUE) Queue queue,
+            @Qualifier(REQUEST_HARDWARE_COMPONENT_EXCHANGE) TopicExchange exchange)
       {
          return BindingBuilder
                .bind(queue)
@@ -68,26 +70,26 @@ public class RabbitConfiguration
       }
    }
 
-   private static class ResponseHardwareComponentConfiguration
+   private static class RequestProductConfiguration
    {
       @Bean
-      @Qualifier(RESPONSE_COMPONENT_QUE)
-      public Queue response_show_hardware_component_que()
+      @Qualifier(REQUEST_PRODUCT_QUE)
+      public Queue request_show_product_que()
       {
-         return new Queue(RESPONSE_COMPONENT_QUE);
+         return new Queue(REQUEST_PRODUCT_QUE);
       }
 
 
       @Bean
-      @Qualifier(RESPONSE_PRODUCT_EXCHANGE)
-      public TopicExchange response_hardware_component_exchange()
+      @Qualifier(REQUEST_PRODUCT_EXCHANGE)
+      public TopicExchange request_product_exchange()
       {
-         return new TopicExchange(RESPONSE_PRODUCT_EXCHANGE);
+         return new TopicExchange(REQUEST_PRODUCT_EXCHANGE);
       }
 
       @Bean
-      public Binding binding_response_component_with_exchange(@Qualifier(RESPONSE_COMPONENT_QUE) Queue queue,
-            @Qualifier(RESPONSE_PRODUCT_EXCHANGE) TopicExchange exchange)
+      public Binding binding_show_product_with_exchange(@Qualifier(REQUEST_PRODUCT_QUE) Queue queue,
+            @Qualifier(REQUEST_PRODUCT_EXCHANGE) TopicExchange exchange)
       {
          return BindingBuilder
                .bind(queue)
