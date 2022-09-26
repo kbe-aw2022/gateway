@@ -35,7 +35,6 @@ public class HardwareComponentController
       return sendRequestAndReceiveResultFromComponentQue(message);
    }
 
-
    @GetMapping("/hardwarecomponents/{id}")
    public List<HardwareComponent> getOneHardwareComponent(@PathVariable int id)
    {
@@ -43,9 +42,6 @@ public class HardwareComponentController
 
       return sendRequestAndReceiveResultFromComponentQue(message);
    }
-
-
-
 
 
    private List<HardwareComponent> sendRequestAndReceiveResultFromComponentQue(final CustomMessage message)

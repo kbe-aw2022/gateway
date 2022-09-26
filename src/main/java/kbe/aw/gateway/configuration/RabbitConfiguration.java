@@ -24,6 +24,9 @@ public class RabbitConfiguration
    public static final String REQUEST_PRODUCT_QUE = "request_show_product_que";
    public static final String REQUEST_PRODUCT_EXCHANGE = "request_product_exchange";
 
+   //Price
+   public static final String REQUEST_PRICE_QUE = "request_price_que";
+   public static final String REQUEST_PRICE_EXCHANGE = "request_price_exchange";
 
 
    public static final String MESSAGE_ROUTING_KEY = "message_routingKey";
@@ -98,4 +101,31 @@ public class RabbitConfiguration
       }
    }
 
+   private static class RequestPriceConfiguration
+   {
+      @Bean
+      @Qualifier(REQUEST_PRICE_QUE)
+      public Queue request_price_que()
+      {
+         return new Queue(REQUEST_PRICE_QUE);
+      }
+
+
+      @Bean
+      @Qualifier(REQUEST_PRICE_EXCHANGE)
+      public TopicExchange request_price_exchange()
+      {
+         return new TopicExchange(REQUEST_PRICE_EXCHANGE);
+      }
+
+      @Bean
+      public Binding binding_request_price_with_exchange(@Qualifier(REQUEST_PRICE_QUE) Queue queue,
+            @Qualifier(REQUEST_PRICE_EXCHANGE) TopicExchange exchange)
+      {
+         return BindingBuilder
+               .bind(queue)
+               .to(exchange)
+               .with(MESSAGE_ROUTING_KEY);
+      }
+   }
 }
