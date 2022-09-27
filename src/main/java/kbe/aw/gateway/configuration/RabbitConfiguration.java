@@ -28,6 +28,10 @@ public class RabbitConfiguration
    public static final String REQUEST_PRICE_QUE = "request_price_que";
    public static final String REQUEST_PRICE_EXCHANGE = "request_price_exchange";
 
+   //Currency
+   public static final String REQUEST_CURRENCY_CALCULATION_QUE = "request_currency_calculation_que";
+   public static final String REQUEST_CURRENCY_CALCULATION_EXCHANGE = "request_currency_calculation_exchange";
+
 
    public static final String MESSAGE_ROUTING_KEY = "message_routingKey";
 
@@ -121,6 +125,34 @@ public class RabbitConfiguration
       @Bean
       public Binding binding_request_price_with_exchange(@Qualifier(REQUEST_PRICE_QUE) Queue queue,
             @Qualifier(REQUEST_PRICE_EXCHANGE) TopicExchange exchange)
+      {
+         return BindingBuilder
+               .bind(queue)
+               .to(exchange)
+               .with(MESSAGE_ROUTING_KEY);
+      }
+   }
+
+   private static class RequestCurrencyCalculationConfiguration
+   {
+      @Bean
+      @Qualifier(REQUEST_CURRENCY_CALCULATION_QUE)
+      public Queue request_currency_calculation_que()
+      {
+         return new Queue(REQUEST_CURRENCY_CALCULATION_QUE);
+      }
+
+
+      @Bean
+      @Qualifier(REQUEST_CURRENCY_CALCULATION_EXCHANGE)
+      public TopicExchange request_currency_calculation_exchange()
+      {
+         return new TopicExchange(REQUEST_CURRENCY_CALCULATION_EXCHANGE);
+      }
+
+      @Bean
+      public Binding binding_request_currency_calculation_with_exchange(@Qualifier(REQUEST_CURRENCY_CALCULATION_QUE) Queue queue,
+            @Qualifier(REQUEST_CURRENCY_CALCULATION_EXCHANGE) TopicExchange exchange)
       {
          return BindingBuilder
                .bind(queue)

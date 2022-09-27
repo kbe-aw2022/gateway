@@ -10,10 +10,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kbe.aw.gateway.configuration.RabbitConfiguration;
-import kbe.aw.gateway.model.Product;
+import kbe.aw.gateway.request.CurrencyCalculationRequest;
 
 @RestController
-public class PriceController
+public class CurrencyController
 {
    @Autowired
    private RabbitTemplate rabbitTemplate;
@@ -21,21 +21,22 @@ public class PriceController
    @Autowired
    private ObjectMapper objectMapper;
 
-   @PostMapping("/price")
-   public Double getPriceForProduct(@RequestBody Product product)
+   @PostMapping("/currency")
+   public Double getPriceForProduct(@RequestBody CurrencyCalculationRequest currencyCalculationRequest)
    {
-      Double price;
-      String result = (String) rabbitTemplate.convertSendAndReceive(RabbitConfiguration.REQUEST_PRICE_QUE, product);
+      Double priceWithCurrency;
+
+      String result = (String) rabbitTemplate.convertSendAndReceive(RabbitConfiguration.REQUEST_CURRENCY_CALCULATION_QUE, currencyCalculationRequest);
 
       try
       {
-         price = objectMapper.readValue(result, Double.class);
+         priceWithCurrency = objectMapper.readValue(result, Double.class);
       }
       catch (JsonProcessingException e)
       {
          throw new RuntimeException(e);
       }
 
-      return price;
+      return priceWithCurrency;
    }
 }
