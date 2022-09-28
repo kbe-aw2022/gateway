@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kbe.aw.gateway.configuration.RabbitConfiguration;
 import kbe.aw.gateway.model.Product;
 
 @RestController
+@Tag(name = "Price")
 public class PriceController
 {
    @Autowired
@@ -22,6 +25,7 @@ public class PriceController
    private ObjectMapper objectMapper;
 
    @PostMapping("/price")
+   @Operation(summary = "calculate and return a price for a product")
    public Double getPriceForProduct(@RequestBody Product product)
    {
       Double price;

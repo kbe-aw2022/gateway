@@ -14,11 +14,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kbe.aw.gateway.configuration.RabbitConfiguration;
 import kbe.aw.gateway.model.HardwareComponent;
 import kbe.aw.gateway.request.CustomMessage;
 
 @RestController
+@Tag(name = "HardwareComponent")
 public class HardwareComponentController
 {
    @Autowired
@@ -28,6 +31,7 @@ public class HardwareComponentController
    private ObjectMapper objectMapper;
 
    @GetMapping("/hardwarecomponents")
+   @Operation(summary = "get all Hardware Components")
    public List<HardwareComponent> getAllHardwareComponents()
    {
       CustomMessage message = createMessage("getAllHardwareComponents");
@@ -36,6 +40,7 @@ public class HardwareComponentController
    }
 
    @GetMapping("/hardwarecomponents/{id}")
+   @Operation(summary = "get one Hardware Components")
    public List<HardwareComponent> getOneHardwareComponent(@PathVariable int id)
    {
       CustomMessage message = createMessage(Integer.toString(id));

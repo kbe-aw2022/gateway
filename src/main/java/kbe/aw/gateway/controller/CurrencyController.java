@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kbe.aw.gateway.configuration.RabbitConfiguration;
 import kbe.aw.gateway.request.CurrencyCalculationRequest;
 
 @RestController
+@Tag(name = "Currency")
 public class CurrencyController
 {
    @Autowired
@@ -22,6 +25,7 @@ public class CurrencyController
    private ObjectMapper objectMapper;
 
    @PostMapping("/currency")
+   @Operation(summary = "calculate and return price with currency")
    public Double getPriceForProduct(@RequestBody CurrencyCalculationRequest currencyCalculationRequest)
    {
       Double priceWithCurrency;

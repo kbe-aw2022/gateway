@@ -14,11 +14,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kbe.aw.gateway.configuration.RabbitConfiguration;
 import kbe.aw.gateway.model.Product;
 import kbe.aw.gateway.request.CustomMessage;
 
 @RestController
+@Tag(name = "Product")
 public class ProductController
 {
    @Autowired
@@ -28,6 +31,7 @@ public class ProductController
    private ObjectMapper objectMapper = new ObjectMapper();
 
    @GetMapping("/products")
+   @Operation(summary = "get all Products")
    public List<Product> getAllProducts()
    {
       CustomMessage message = createMessage("getAllProducts");
@@ -36,6 +40,7 @@ public class ProductController
    }
 
    @GetMapping("/products/{id}")
+   @Operation(summary = "get one product")
    public List<Product> getOneProduct(@PathVariable int id)
    {
       CustomMessage message = createMessage(Integer.toString(id));
