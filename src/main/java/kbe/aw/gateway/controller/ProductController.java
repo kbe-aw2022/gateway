@@ -8,6 +8,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,8 +18,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kbe.aw.gateway.configuration.RabbitConfiguration;
+import kbe.aw.gateway.exception.RequestNotValidException;
 import kbe.aw.gateway.model.Product;
 import kbe.aw.gateway.request.CustomMessage;
+import kbe.aw.gateway.validation.Validation;
 
 @RestController
 @Tag(name = "Product")
@@ -30,10 +33,18 @@ public class ProductController
    @Autowired
    private ObjectMapper objectMapper = new ObjectMapper();
 
+   @Autowired
+   private Validation validation;
+
    @GetMapping("/products")
    @Operation(summary = "get all Products")
-   public List<Product> getAllProducts()
+   public List<Product> getAllProducts(@RequestBody String token)
    {
+      if(!validation.tokenIsValid(token))
+      {
+         throw new RequestNotValidException();
+      }
+
       CustomMessage message = createMessage("getAllProducts");
 
       return sendRequestAndReceiveResultFromProductQue(message);
